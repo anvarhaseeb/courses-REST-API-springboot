@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springbootrest.springbootrest.model.Courses;
@@ -22,6 +23,12 @@ import com.springbootrest.springbootrest.services.CourseService;
 public class MyController {
 	@Autowired
 	private CourseService courseService;
+
+    @RequestMapping("/test")
+    public String test() {
+       System.out.println("This is working message");
+        return "Testing message";
+    }
 
 	@GetMapping(value = "/home", produces = MediaType.APPLICATION_JSON_VALUE)
 	public MyResponse getString() {
@@ -45,10 +52,12 @@ public class MyController {
 		return courseService.addCourses(course);
 	}
 
-	@PutMapping(value = "/courses", 	consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Courses  updateCourse(@RequestBody Courses course){
-		return courseService.updateCourses(course);
+
+	@PutMapping(value = "/courses/{courseId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Courses updateCourse(@PathVariable String courseId, @RequestBody Courses course){
+	    return courseService.updateCourses(Long.parseLong(courseId), course);
 	}
+
 
 	@DeleteMapping(value = "/courses/{courseId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId) {

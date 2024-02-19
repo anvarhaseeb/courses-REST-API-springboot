@@ -1,22 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login Page</title>
+    <title>Course Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body class="bg-light">
+<header class=" py-3 text-center"  style="background-color: #003060">
     <div class="container">
+        <h1 class="text-light">Course Management</h1>
+    </div>
+</header>
+
+    <div class="container mt-3 mb-3  p-3 bg-white rouded">
         <div id="responseMessage" class="mt-3"></div>
-        
         <button class="btn btn-primary mt-3" onclick="submitLogin()">Click here to view message</button>
-        <button class="btn btn-success mt-3" onclick="toggleTable()">Click to display courses table</button>
+        <button class="btn btn-success mt-3" onclick="toggleTable()">Click to display all courses table</button>
         <div id="courseTable" class="mt-3" style="display: none;"></div>
     </div>
-   <div class="container mt-3">
-        <h1>Search for a Particular Course</h1>
+
+    <div class="container mt-3 mb-3  p-3 " style="background-color: WhiteSmoke">
+        <h2>Add a New Course</h2>
+        <div class="row">
+            <div class="col"> 
+                <input class="form-control" type="text" id="newCourseId" placeholder="Enter Course ID">
+            </div>
+            <div class="col">
+                <input class="form-control" type="text" id="newCourseTitle" placeholder="Enter Course Title">
+            </div>
+            <div class="col">
+                <input class="form-control" type="text" id="newCourseDescription" placeholder="Enter Course Description">
+            </div>
+            <div class="col">
+                <button class="btn btn-primary" onclick="addCourse()">Add Course</button>
+            </div>
+            <div id="msgAdd"></div>
+        </div>
+    </div>
+	   <div class="container mt-3 mb-3  p-3 rounded bg-white">
+        <h2>Search for a Particular Course</h2>
         <div class="row">
             <div class="col">
                 <input class="form-control" type="text" id="courseIdInput" placeholder="Enter Course ID">
@@ -28,38 +54,75 @@
 
         <div id="courseDetails" class="mt-3"></div>
     </div>
+    <div class="container mt-3 mb-3  p-3 ">
+  
+        <div id="updateCourseSection" style="display: none; background-color: WhiteSmoke">
+			      <h2>Update Course</h2>
+            <div class="row">
+                <div class="col">
+                    <label for="updateCourseId">Course ID:</label>
+                    <input class="form-control" type="text" id="updateCourseId" placeholder="Enter Course ID">
+                </div>
+                <div class="col">
+                    <label for="updateCourseTitle">Title:</label>
+                    <input class="form-control" type="text" id="updateCourseTitle" placeholder="Enter Title">
+                </div>
+                <div class="col">
+                    <label for="updateCourseDescription">Description:</label>
+                    <input class="form-control" type="text" id="updateCourseDescription" placeholder="Enter Description">
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary" onclick="updateCourse()">Update Course</button>
+                </div>
+            </div>
+
+        </div>
+                    <div id="updateResponseMessage" class="mt-3"></div>
+    </div>
 
     <script>
-        function searchCourse() {
-            var courseId = document.getElementById("courseIdInput").value;
-            var url = "http://localhost:8080/courses/" + courseId;
+localStorage.setItem('jwtToken', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbnZhciIsImlhdCI6MTcwODA4MjUyNCwiZXhwIjoxNzA4MjYyNTI0fQ.gIihXJ5p3CFBa8PJnaTuwgKlL41EUjAb00MMXt5dgCrwCvnfncjWfyZgXK40B9QWuKS8beHoexrR_XFCeipmHQ');
 
-            $.ajax({
-                url: url,
-                type: "GET",
-                dataType: "json",
-                success: function(data) {
-                    var courseDetails = document.getElementById("courseDetails");
-                    var tableHtml = "<table class='table table-bordered'><thead style='background-color: #003060; color: white;'><tr><th>ID</th><th>Title</th><th>Description</th></tr></thead><tbody>";
-                    tableHtml += "<tr><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.description + "</td></tr>";
-                    tableHtml += "</tbody></table>";
-                    courseDetails.innerHTML = tableHtml;
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error: " + error);
-                    var courseDetails = document.getElementById("courseDetails");
-                    courseDetails.innerHTML = "<p>Error: Course not found</p>";
-                }
-            });
+		function getToken() {
+    return localStorage.getItem('jwtToken'); 
+}
+function searchCourse() {
+    var courseId = document.getElementById("courseIdInput").value;
+    var url = "http://localhost:8080/courses/" + courseId;
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        dataType: "json",
+         headers: {
+            'Authorization': 'Bearer ' + getToken() 
+        },
+        success: function(data) {
+            var courseDetails = document.getElementById("courseDetails");
+            var tableHtml = "<table class='table table-bordered'><thead style='background-color: #003060; color: white;'><tr><th>ID</th><th>Title</th><th>Description</th><th>Actions</th></tr></thead><tbody>";
+            tableHtml += "<tr><td>" + data.id + "</td><td>" + data.title + "</td><td>" + data.description + "</td>";
+            tableHtml += "<td class='d-flex gap-3'> <button class='btn btn-danger' onclick='deleteCourse(" + data.id + ")'><i class='fas fa-trash'></i></button>";
+			tableHtml += "<button class='btn btn-primary' onclick='populateUpdateForm(" + data.id + ",\"" + data.title + "\",\"" + data.description + "\")'><i class='fas fa-pen'></i></button></td></tr>";
+
+            tableHtml += "</tbody></table>";
+            courseDetails.innerHTML = tableHtml;
+        },
+        error: function(xhr, status, error) {
+            console.error("Error: " + error);
+            var courseDetails = document.getElementById("courseDetails");
+            courseDetails.innerHTML = "<p>Error: Course not found</p>";
         }
-
-        var tableVisible = false;
+    });
+}
 
         function submitLogin() {
             $.ajax({
                 url: "http://localhost:8080/home",
                 type: "GET",
                 dataType: "json",
+                   headers: {
+            'Authorization': 'Bearer ' + getToken() 
+        },
                 success: function(data) {
                     var responseMessage = document.getElementById("responseMessage");
                     responseMessage.innerHTML = "<div class='bg-dark p-3 text-white'> Response Message: " + data.message + " </div>";
@@ -75,12 +138,17 @@
                 url: "http://localhost:8080/courses",
                 type: "GET",
                 dataType: "json",
+                   headers: {
+            'Authorization': 'Bearer ' + getToken() 
+        },
                 success: function(data) {
                     var courseTable = document.getElementById("courseTable");
-                    var tableHtml = "<table class='table table-bordered'><thead style='background-color: #003060; color: white;'><tr><th>ID</th><th>Name</th><th>Description</th></tr></thead><tbody>";
+                    var tableHtml = "<table class='table table-bordered'><thead style='background-color: #003060; color: white;'><tr><th>ID</th><th>Title</th><th>Description</th><th>Action</th></tr></thead><tbody>";
 
                     data.forEach(course => {
-                        tableHtml += "<tr><td>" + course.id + "</td><td>" + course.title + "</td><td>" + course.description + "</td></tr>";
+                        tableHtml += "<tr><td>" + course.id + "</td><td>" + course.title + "</td><td>" + course.description + "</td>";
+                        tableHtml += "<td class='d-flex gap-3'><button class='btn btn-danger' onclick='deleteCourse(" + course.id + ")'><i class='fas fa-trash'></i></button>";
+                        tableHtml += "<button class='btn btn-primary' onclick='populateUpdateForm(" + course.id + ",\"" + course.title + "\",\"" + course.description + "\")'><i class='fas fa-pen' ></i></button></td></tr>";
                     });
 
                     tableHtml += "</tbody></table>";
@@ -94,14 +162,118 @@
 
         function toggleTable() {
             var courseTable = document.getElementById("courseTable");
-            if (tableVisible) {
-                courseTable.style.display = "none";
-                tableVisible = false;
-            } else {
+            if (courseTable.style.display === "none") {
                 courseTable.style.display = "block";
-                tableVisible = true;
                 viewCourses();
+            } else {
+                courseTable.style.display = "none";
             }
+        }
+
+       function addCourse() {
+    var courseId = document.getElementById("newCourseId").value;
+    var title = document.getElementById("newCourseTitle").value;
+    var description = document.getElementById("newCourseDescription").value;
+
+    if (courseId.trim() !== "") {
+        var newCourse = {
+            id: courseId,
+            title: title,
+            description: description
+        };
+
+        $.ajax({
+            url: "http://localhost:8080/courses",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(newCourse),
+                   headers: {
+            'Authorization': 'Bearer ' + getToken() 
+        },
+            success: function(data) {
+                document.getElementById("newCourseId").value = "";
+                document.getElementById("newCourseTitle").value = "";
+                document.getElementById("newCourseDescription").value = "";
+                viewCourses();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);
+            }
+        });
+    } else {
+        $('#msgAdd').html("<div class='alert alert-danger mt-2' role='alert'>Enter the data to add the course !</div>");
+            setTimeout(function() {
+					        msgAdd.innerHTML = ''; 
+					    }, 2000); 
+					
+    }
+}
+
+        function deleteCourse(courseId) {
+            if (confirm("Are you sure you want to delete this course?")) {
+                $.ajax({
+                    url: "http://localhost:8080/courses/" + courseId,
+                    type: "DELETE",
+                       headers: {
+            'Authorization': 'Bearer ' + getToken() // Include JWT token in request headers
+        },
+                    success: function(data) {
+                        viewCourses();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error: " + error);
+                    }
+                });
+            }
+        }
+
+        var updateCourseIdInput = document.getElementById("updateCourseId");
+        var updateCourseTitleInput = document.getElementById("updateCourseTitle");
+        var updateCourseDescriptionInput = document.getElementById("updateCourseDescription");
+
+        function populateUpdateForm(courseId, title, description) {
+            updateCourseIdInput.value = courseId;
+            updateCourseTitleInput.value = title;
+            updateCourseDescriptionInput.value = description;
+            $('#updateCourseSection').show();
+        }
+
+        function updateCourse() {
+            var courseId = updateCourseIdInput.value;
+            var title = updateCourseTitleInput.value;
+            var description = updateCourseDescriptionInput.value;
+
+            var data = {
+                id: courseId,
+                title: title,
+                description: description
+            };
+
+            $.ajax({
+                url: "http://localhost:8080/courses/" + courseId,
+                type: "PUT",
+                contentType: "application/json",
+                   headers: {
+            'Authorization': 'Bearer ' + getToken() // Include JWT token in request headers
+        },
+                data: JSON.stringify(data),
+				  success: function(response) {
+					    var updateResponseMessage = document.getElementById("updateResponseMessage");
+					    updateResponseMessage.innerHTML = "<div class='alert alert-success' role='alert'>Course updated successfully!</div>";
+					
+					    setTimeout(function() {
+					        updateResponseMessage.innerHTML = ''; 
+					    }, 3000); 
+					
+					    viewCourses();
+					    $('#updateCourseSection').hide();
+					},
+                error: function(xhr, status, error) {
+                    console.error("Error: " + error);
+                    var updateResponseMessage = document.getElementById("updateResponseMessage");
+                    updateResponseMessage.innerHTML = "<div class='alert alert-danger' role='alert'>Error updating course: " + error + "</div>";
+                }
+            });
         }
     </script>
 </body>

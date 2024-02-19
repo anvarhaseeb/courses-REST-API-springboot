@@ -11,6 +11,7 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {
+    	
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("*");  
@@ -18,5 +19,7 @@ public class CorsConfig {
         config.addAllowedHeader("*"); 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
+        
     }
+    
 }

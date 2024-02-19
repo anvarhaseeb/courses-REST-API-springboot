@@ -1,17 +1,16 @@
 package com.springbootrest.springbootrest.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Courses {
+	@Id
 	private long id;
 	private String title;
 	private String description;
-	
-	
-	public Courses(long id, String title, String description) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.description = description;
-	}
+
+
 	public long getId() {
 		return id;
 	}
@@ -30,6 +29,6 @@ public class Courses {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+
 }
