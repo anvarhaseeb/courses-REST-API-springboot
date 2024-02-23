@@ -3,16 +3,18 @@ import './App.css';
  import Header from './components/Header';
  import { Button } from "reactstrap";
 
-
+import Home from './components/Home'
+import Course from './components/Course';
 function App() {
-  return (
 
+  return (
     <div className="App">
-    <Header  />
-    <hr />
-      <h1>This is my react app course</h1>
-      <h1>This is my bootstrap component</h1>  
-     <Button color="danger">React </Button>
+    <Header  />     
+
+    <Home/>
+    <Course course={{title:"Java Course",description:"It is java Course for beginners"}}/>
+    
+ 
     </div>
   );
 }
