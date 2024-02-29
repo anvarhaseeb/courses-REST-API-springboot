@@ -1,5 +1,5 @@
 import React from "react";
-import { ListGroup, ListGroupItem } from "reactstrap";
+import { ListGroup } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
 
 const Menu = () => {
@@ -51,9 +51,9 @@ const Menu = () => {
 
       <Link className="list-group-item list-group-item-action"
         tag="a"
-        to="/aboutus"
+        to="/contactus"   
         action
-        style={location.pathname === "/c" ? activeStyle : inactiveStyle}
+        style={location.pathname === "/contactus" ? activeStyle : inactiveStyle}
       >
         Contact Us
       </Link>
