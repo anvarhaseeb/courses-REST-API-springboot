@@ -3,7 +3,7 @@ function Header()
 {
     return(
         <div style={{backgroundColor:'dodgerblue ',padding:15 }}>
-            <h2 className="text-white">Courses Management System</h2>
+            <h2 className="text-white text-center">Courses Management System</h2>
             
         </div>
     );
