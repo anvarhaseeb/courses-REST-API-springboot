@@ -7,7 +7,8 @@ import { toast, ToastContainer } from "react-toastify";
 
 const UpdateCourse = () => {
   const { id } = useParams();
-   const navigate  = useNavigate ();
+  const navigate  = useNavigate ();
+  const token =  sessionStorage.getItem('token');
   const [course, setCourse] = useState({
     id: "",
     title: "",
@@ -22,18 +23,25 @@ const UpdateCourse = () => {
   const fetchData = (id) => {
     axios.get(`${base_url}/courses/${id}`, {
       headers: {
-        Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbnZhciIsImlhdCI6MTcwOTEwMjM3MSwiZXhwIjoxNzA5MjgyMzcxfQ.cfQstnlmyUhy1CoBLhLBJHR_7JlrJnhrr5NEedEEWhenAiUMxZJN4B3gwWcUp4ZH8_4PIvkcvdHJaM8viAg6pg'
-      }
+        Authorization: `${token}`      }
     })
     .then(response => {
       const { id, title, description } = response.data;
       setCourse({ id, title, description });
       toast.success("Course viewed");
-    })
-    .catch(error => {
-      console.error("Error fetching course:", error);
-      toast.error("Failed to fetch course");
-    });
+    }).catch((error) => {
+      if (error.response && error.response.status === 401) {
+
+        sessionStorage.removeItem('token');
+          toast.error("Token expired. Please log in again.");
+       
+      } else {
+          console.log(error);
+          console.error("Error fetching course:", error);
+          toast.error("Failed to fetch course");
+      }
+  });
+
   };
 
 
@@ -42,8 +50,7 @@ const UpdateCourse = () => {
 
     axios.put(`${base_url}/courses/${course.id}`, course, {
       headers: {
-        Authorization: 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbnZhciIsImlhdCI6MTcwOTEwMjM3MSwiZXhwIjoxNzA5MjgyMzcxfQ.cfQstnlmyUhy1CoBLhLBJHR_7JlrJnhrr5NEedEEWhenAiUMxZJN4B3gwWcUp4ZH8_4PIvkcvdHJaM8viAg6pg'
-      }
+        Authorization: `${token}`     }
     })
     .then(response => {
       console.log("Course updated:", response.data);
@@ -63,7 +70,7 @@ const UpdateCourse = () => {
   return (
     <div>
       <h2>Update Course</h2>
-      <p>Course ID: {id}</p>
+     
       <Form className="mx-auto" style={{ maxWidth: "500px" }} onSubmit={handleForm}>
         <FormGroup>
           <Label for="userId" style={{ textAlign: "left" }}>Course Id</Label>

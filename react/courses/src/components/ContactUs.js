@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { ToastContainer, toast } from "react-toastify";
 const ContactUs=()=>{
     const btnHandles =()=>{
-        toast.success("You are will recieve a mail!")
+        toast.success("You  will recieve a mail!")
       }
 return(
     <div>

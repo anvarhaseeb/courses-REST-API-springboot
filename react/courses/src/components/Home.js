@@ -8,9 +8,9 @@ const Home = () => {
       }
   return (
     <>
-    <div className="container-fluid bg-light text-dark p-5">
-    <div className="container bg-light p-5">
-      <h1 className="display-3 ">Learn Course with us for free !</h1>
+    <div class="container-fluid bg-light text-dark p-5">
+    <div class="container bg-light p-5">
+      <h1 class="display-3 ">Learn Course with us for free !</h1>
       <hr/>
         <p>This is the management system where we can do crud operation on the app</p>
         <Button color="primary" outline onClick={btnHandle}>click here  </Button>
