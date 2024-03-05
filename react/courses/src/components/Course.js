@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const Course = ({ course, update }) => {
-  const token = localStorage.getItem('token');
+      const token =  sessionStorage.getItem('token');
 
   const deleteCourse = (id) => {
+      console.log("---->"+id);
     axios.delete(`${base_url}/courses/${id}`, {
       headers: {
         Authorization: `${token}`
@@ -31,21 +32,22 @@ const Course = ({ course, update }) => {
   }
 
   return (
-    <tr>
-      <td className="fw-bold">{course.title}</td>
-      <td>{course.description}</td>
-      <td className="text-center">
-        <FaTrash color="red" onClick={() => deleteCourse(course.id)}>
-          Delete
-        </FaTrash>
-        <Link to={`/update-course/${course.id}`}>
-          <FaEdit color="blue" className="btn btn-warning m-3">
-            Update
-          </FaEdit>
-        </Link>
-      </td>
-    </tr>
-  )
+      <tr>
+        <td className="fw-bold">{course.title}</td>
+        <td>{course.description}</td>
+        <td className="text-center">
+          <FaTrash style={{cursor: "pointer"}} color="red" onClick={() => deleteCourse(course.id)}>
+            Delete
+          </FaTrash>
+          <Link to={`/update-course/${course.id}`}>
+          <FaEdit style={{ color: "blue",cursor: "pointer" }} className="m-3" type="pointer">
+               Update
+              </FaEdit>
+              </Link>
+  
+        </td>
+      </tr>
+    )
 }
 
 export default Course;

@@ -2,9 +2,10 @@ import React from "react";
 import { ListGroup } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
 
-const Menu = ({ token }) => {
-  const location = useLocation();
 
+const Menu = () => {
+  const location = useLocation();
+  const token = sessionStorage.getItem('token');
   const activeStyle = {
     backgroundColor: "#14509E",
     color: "white"   
@@ -17,6 +18,7 @@ const Menu = ({ token }) => {
 
   return (
     <ListGroup>
+   
       <br />
       <Link
         className="list-group-item list-group-item-action"
@@ -57,30 +59,32 @@ const Menu = ({ token }) => {
       >
         Contact Us
       </Link>
+{token ? (
+  <div>
 
-      {token ? (
-        <Link
-          className="list-group-item list-group-item-action"
-          tag="a"
-          to="/logout"
-          action
-          style={location.pathname === "/logout" ? activeStyle : inactiveStyle}
-        >
-          Logout
-        </Link>
-      ) : (
-        <Link
-          className="list-group-item list-group-item-action"
-          tag="a"
-          to="/login"
-          action
-          style={location.pathname === "/login" ? activeStyle : inactiveStyle}
-        >
-          Login
-        </Link>
-      )}
-    </ListGroup>
-  );
+    <Link
+      className="list-group-item list-group-item-action"
+      tag="a"
+      to="/login"
+      action
+      style={location.pathname === "/login" ? activeStyle : inactiveStyle}
+    >
+      Logout
+    </Link>
+  </div>
+) : (
+  <Link
+    className="list-group-item list-group-item-action"
+    tag="a"
+    to="/login"
+    action
+    style={location.pathname === "/login" ? activeStyle : inactiveStyle}
+  >
+    Login
+  </Link>
+)}
+</ListGroup>
+);
 };
 
 export default Menu;

@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 } */
+.main-content {
+  min-height: calc(100vh - 56px); /* Adjust 56px according to your header height */
+}
+
+/* Apply styles for smaller screens */
+@media (max-width: 768px) {
+  /* Reduce the minimum height of the main content area */
+  .main-content {
+    min-height: calc(100vh - 56px); /* Adjust 56px according to your header height */
+  }
+}
