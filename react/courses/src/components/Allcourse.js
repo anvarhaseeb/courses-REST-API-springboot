@@ -35,8 +35,8 @@ const AllCourse = () => {
 
   return (
     <div>
-      <h1 style={{ color: 'blue' }}>All Courses</h1>
-      <p>List of courses</p>
+      <h1 style={{ color: 'blue' ,textAlign:"center"}}>All Courses</h1>
+      <p>List of courses :</p>
       <ToastContainer />
       <Table striped bordered>
         <thead style={{ backgroundColor: 'blue', color: 'white' }}>

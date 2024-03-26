@@ -46,9 +46,7 @@ const AddCourse = () => {
       toast.error("Please login to do Crud Operarion.");
       toast.error("Token expired. Please log in again.");
     }
-    else{
-    navigate("/view-course");   
-    }
+    
   }
   
 
@@ -61,7 +59,7 @@ const AddCourse = () => {
       (response)=>{
         console.log(response)
         toast.success("The Course has been added")
-        
+        navigate("/view-course");  
       }
 
     ).catch((error) => {
